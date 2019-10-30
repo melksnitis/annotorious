@@ -153,7 +153,12 @@ annotorious.mediatypes.Module.prototype._initAnnotator = function(item, tags, ta
 
   if(tagsColorMap)
     this._cachedProperties["tagsColorMap"] = tagsColorMap;
+console.log('_cachedProperties====================================');
+console.log(this._cachedProperties);
 
+console.log(tagsColorMap);
+
+console.log('====================================');
   if (this._cachedProperties)
     annotator.setProperties(this._cachedProperties);
 
