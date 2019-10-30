@@ -262,7 +262,7 @@ annotorious.mediatypes.image.Viewer.prototype.redraw = function() {
   var self = this;
   goog.array.forEach(this._annotations, function(annotation) {
 	if (annotation != self._currentAnnotation)
-      self._draw(self._shapes[annotorious.shape.hashCode(annotation.shapes[0])], false, self._currentAnnotation.tag);
+      self._draw(self._shapes[annotorious.shape.hashCode(annotation.shapes[0])], false, annotation.tag);
   });
 
   if (this._currentAnnotation) {
