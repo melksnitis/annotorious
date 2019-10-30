@@ -265,11 +265,10 @@ annotorious.mediatypes.image.Viewer.prototype.redraw = function() {
   var self = this;
   goog.array.forEach(this._annotations, function(annotation) {
   if (annotation != self._currentAnnotation)
-  console.log('EDIT SHAPE====================================');
-  console.log(annotation.tag);
-  console.log(annotation);
-  console.log('====================================');
-      self._draw(self._shapes[annotorious.shape.hashCode(annotation.shapes[0])], false, annotation["tag"]);
+
+      var tagName = annotation["tag"] || annotation.tag;
+
+      self._draw(self._shapes[annotorious.shape.hashCode(annotation.shapes[0])], false, tagName);
   });
 
   if (this._currentAnnotation) {
