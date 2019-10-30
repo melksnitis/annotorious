@@ -269,7 +269,7 @@ annotorious.mediatypes.image.Viewer.prototype.redraw = function() {
   console.log(annotation.tag);
   console.log(annotation);
   console.log('====================================');
-      self._draw(self._shapes[annotorious.shape.hashCode(annotation.shapes[0])], false, annotation.tag);
+      self._draw(self._shapes[annotorious.shape.hashCode(annotation.shapes[0])], false, annotation["tag"]);
   });
 
   if (this._currentAnnotation) {
