@@ -23,5 +23,6 @@
   "mode": "ADVANCED",      // "RAW" or "ADVANCED"
   "level": "DEFAULT",      // "DEFAULT" or "VERBOSE"
   "pretty-print": false,
-  "debug": false
+  "debug": false,
+  "output-file": "out.min.js"
 }

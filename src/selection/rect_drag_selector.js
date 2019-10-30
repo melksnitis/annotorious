@@ -21,16 +21,16 @@ annotorious.plugins.selection.RectDragSelector.prototype.init = function(annotat
 
   /** @private **/
   this._STROKE = '#ffffff';
-  
+
   /** @private **/
   this._FILL = false;
-  
+
   /** @private **/
   this._HI_OUTLINE = '#000000';
 
   /** @private **/
   this._HI_STROKE = '#fff000';
-  
+
   /** @private **/
   this._HI_FILL = false;
 
@@ -45,20 +45,20 @@ annotorious.plugins.selection.RectDragSelector.prototype.init = function(annotat
 
   /** @private **/
   this._HI_STROKE_WIDTH = 1.2;
-	
+
   /** @private **/
   this._canvas = canvas;
-  
+
   /** @private **/
   this._annotator = annotator;
 
   /** @private **/
   this._g2d = canvas.getContext('2d');
   this._g2d.lineWidth = 1;
- 
+
   /** @private **/
   this._anchor;
-  
+
   /** @private **/
   this._opposite;
 
@@ -70,6 +70,8 @@ annotorious.plugins.selection.RectDragSelector.prototype.init = function(annotat
 
   /** @private **/
   this._mouseUpListener;
+
+  this._TAGS;
 }
 
 /**
@@ -77,16 +79,16 @@ annotorious.plugins.selection.RectDragSelector.prototype.init = function(annotat
  * @private
  */
 annotorious.plugins.selection.RectDragSelector.prototype._attachListeners = function(startPoint) {
-  var self = this;  
+  var self = this;
   var canvas = this._canvas;
-  
+
   this._mouseMoveListener = goog.events.listen(this._canvas, annotorious.events.ui.EventType.MOVE, function(event) {
     var points = annotorious.events.ui.sanitizeCoordinates(event, canvas);
     if (self._enabled) {
       self._opposite = { x: points.x, y: points.y };
 
       self._g2d.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       var width = self._opposite.x - self._anchor.x;
       var height = self._opposite.y - self._anchor.y;
 
@@ -107,12 +109,16 @@ annotorious.plugins.selection.RectDragSelector.prototype._attachListeners = func
     var points = annotorious.events.ui.sanitizeCoordinates(event, canvas);
     var shape = self.getShape();
     event = (event.event_) ? event.event_ : event;
-    
+
     self._enabled = false;
+
+    console.log('EVENT TAGS====================================');
+    console.log(self._TAGS);
+    console.log('====================================');
     if (shape) {
       self._detachListeners();
       self._annotator.fireEvent(annotorious.events.EventType.SELECTION_COMPLETED,
-        { mouseEvent: event, shape: shape, viewportBounds: self.getViewportBounds() }); 
+        { mouseEvent: event, shape: shape, viewportBounds: self.getViewportBounds() , tags: self._TAGS});
     } else {
       self._annotator.fireEvent(annotorious.events.EventType.SELECTION_CANCELED);
 
@@ -162,13 +168,22 @@ annotorious.plugins.selection.RectDragSelector.prototype.getSupportedShapeType =
 /**
  * Sets the properties on this selector.
  */
-annotorious.plugins.selection.RectDragSelector.prototype.setProperties = function(props) {  
+annotorious.plugins.selection.RectDragSelector.prototype.setProperties = function(props) {
+  console.log('==================================== PROPS');
+  console.log(props.hasOwnProperty('tags') );
+  console.log(props['tags'] );
+  console.log('====================================');
+  if (props.hasOwnProperty('tags'))
+    this._TAGS = props['tags'];
+    console.log(this._TAGS );
+    console.log('his._TAGS====================================');
+
   if (props.hasOwnProperty('outline'))
     this._OUTLINE = props['outline'];
 
   if (props.hasOwnProperty('stroke'))
     this._STROKE = props['stroke'];
- 
+
   if (props.hasOwnProperty('fill'))
     this._FILL = props['fill'];
 
@@ -209,7 +224,7 @@ annotorious.plugins.selection.RectDragSelector.prototype.startSelection = functi
   this._anchor = new annotorious.shape.geom.Point(x, y);
   this._annotator.fireEvent(annotorious.events.EventType.SELECTION_STARTED, {
     offsetX: x, offsetY: y});
-  
+
   goog.style.setStyle(document.body, '-webkit-user-select', 'none');
 }
 
@@ -228,14 +243,14 @@ annotorious.plugins.selection.RectDragSelector.prototype.stopSelection = functio
  * @return {annotorious.shape.Shape | undefined} the shape
  */
 annotorious.plugins.selection.RectDragSelector.prototype.getShape = function() {
-  if (this._opposite && 
-     (Math.abs(this._opposite.x - this._anchor.x) > 3) && 
+  if (this._opposite &&
+     (Math.abs(this._opposite.x - this._anchor.x) > 3) &&
      (Math.abs(this._opposite.y - this._anchor.y) > 3)) {
-       
+
     var viewportBounds = this.getViewportBounds();
     // var item_anchor = this._annotator.toItemCoordinates({x: viewportBounds.left, y: viewportBounds.top});
     // var item_opposite = this._annotator.toItemCoordinates({x: viewportBounds.right, y: viewportBounds.bottom});
- 
+
     /*
     var rect = new annotorious.shape.geom.Rectangle(
       item_anchor.x,
@@ -267,20 +282,24 @@ annotorious.plugins.selection.RectDragSelector.prototype.getViewportBounds = fun
     left = this._anchor.x;
   } else {
     right = this._anchor.x;
-    left = this._opposite.x;    
+    left = this._opposite.x;
   }
-  
+
   var top, bottom;
   if (this._opposite.y > this._anchor.y) {
     top = this._anchor.y;
     bottom = this._opposite.y;
   } else {
     top = this._opposite.y;
-    bottom = this._anchor.y;    
+    bottom = this._anchor.y;
   }
-  
+
   return {top: top, right: right, bottom: bottom, left: left};
 }
+
+annotorious.plugins.selection.RectDragSelector.prototype.getTags = function() {
+  return this._TAGS
+};
 
 /**
  * TODO not sure if this is really the best way/architecture to handle viewer shape drawing
@@ -292,7 +311,7 @@ annotorious.plugins.selection.RectDragSelector.prototype.drawShape = function(g2
   var geom, stroke, fill, outline, outline_width, stroke_width;
 
   if (!shape.style) shape.style = {};
-  
+
   if (shape.type == annotorious.shape.ShapeType.RECTANGLE) {
     if (highlight) {
       fill = shape.style.hi_fill || this._HI_FILL;
@@ -316,9 +335,9 @@ annotorious.plugins.selection.RectDragSelector.prototype.drawShape = function(g2
         g2d.lineWidth = outline_width;
         g2d.strokeStyle = outline;
         g2d.strokeRect(
-          geom.x + outline_width/2, 
-          geom.y + outline_width/2, 
-          geom.width - outline_width, 
+          geom.x + outline_width/2,
+          geom.y + outline_width/2,
+          geom.width - outline_width,
           geom.height - outline_width
         );
     }
@@ -329,22 +348,22 @@ annotorious.plugins.selection.RectDragSelector.prototype.drawShape = function(g2
       g2d.lineWidth = stroke_width;
       g2d.strokeStyle = stroke;
       g2d.strokeRect(
-        geom.x + outline_width + stroke_width/2, 
-        geom.y + outline_width + stroke_width/2, 
-        geom.width - outline_width*2 - stroke_width, 
+        geom.x + outline_width + stroke_width/2,
+        geom.y + outline_width + stroke_width/2,
+        geom.width - outline_width*2 - stroke_width,
         geom.height - outline_width*2 - stroke_width
       );
     }
 
-    // Fill   
+    // Fill
     if (fill) {
       g2d.lineJoin = "miter";
       g2d.lineWidth = stroke_width;
       g2d.fillStyle = fill;
       g2d.fillRect(
-        geom.x + outline_width + stroke_width/2, 
-        geom.y + outline_width + stroke_width/2, 
-        geom.width - outline_width*2 - stroke_width, 
+        geom.x + outline_width + stroke_width/2,
+        geom.y + outline_width + stroke_width/2,
+        geom.width - outline_width*2 - stroke_width,
         geom.height - outline_width*2 - stroke_width
       );
     }

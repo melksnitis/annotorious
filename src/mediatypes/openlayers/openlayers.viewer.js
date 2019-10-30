@@ -38,7 +38,7 @@ annotorious.mediatypes.openlayers.Viewer = function(map, annotator) {
   /** @private **/
   this._boxesLayer = new OpenLayers.Layer.Boxes('Annotorious'); // TODO make configurable
   this._map.addLayer(this._boxesLayer);
-  
+
   var self = this;
   this._map.events.register('move', this._map, function() {
     if (self._currentlyHighlightedOverlay)
@@ -65,9 +65,9 @@ annotorious.mediatypes.openlayers.Viewer.prototype._place_popup = function() {
   var annotation_div = this._currentlyHighlightedOverlay.marker.div;
   var annotation_dim = goog.style.getBounds(annotation_div);
   var annotation_pos = goog.style.getRelativePosition(annotation_div, this._map.div);
-  var annotation_bounds = { top: annotation_pos.y, 
-                            left: annotation_pos.x, 
-                            width: annotation_dim.width, 
+  var annotation_bounds = { top: annotation_pos.y,
+                            left: annotation_pos.x,
+                            width: annotation_dim.width,
                             height: annotation_dim.height };
 
   // Popup width & height
@@ -87,11 +87,11 @@ annotorious.mediatypes.openlayers.Viewer.prototype._place_popup = function() {
 
   if (popup_pos.x + popup_bounds.width > this._map_bounds.width)
     popup_pos.x = this._map_bounds.width - popup_bounds.width;
-     
+
   if (popup_pos.y + popup_bounds.height > this._map_bounds.height)
     popup_pos.y = this._map_bounds.height - popup_bounds.height;
 
-  this._popup.setPosition(popup_pos);    
+  this._popup.setPosition(popup_pos);
 }
 
 /**
@@ -99,6 +99,9 @@ annotorious.mediatypes.openlayers.Viewer.prototype._place_popup = function() {
  * @param {annotorious.Annotation} annotation the annotation
  */
 annotorious.mediatypes.openlayers.Viewer.prototype._show_popup = function(annotation) {
+  console.log(' openlayers====================================');
+  console.log(annotation);
+  console.log('====================================');
   this._popup.setAnnotation(annotation);
   this._place_popup();
   this._popup.show();
@@ -134,7 +137,7 @@ annotorious.mediatypes.openlayers.Viewer.prototype.addAnnotation = function(anno
     new OpenLayers.Marker.Box(new OpenLayers.Bounds(geometry.x, geometry.y, geometry.x + geometry.width, geometry.y + geometry.height));
   goog.dom.classes.add(marker.div, 'annotorious-ol-boxmarker-outer');
   goog.style.setStyle(marker.div, 'border', null);
-  
+
   var inner = goog.dom.createDom('div', 'annotorious-ol-boxmarker-inner');
   goog.style.setSize(inner, '100%', '100%');
   goog.dom.appendChild(marker.div, inner);
@@ -148,12 +151,12 @@ annotorious.mediatypes.openlayers.Viewer.prototype.addAnnotation = function(anno
 
     self._lastHoveredOverlay = overlay;
   });
-  
+
   goog.events.listen(inner, goog.events.EventType.MOUSEOUT, function(event) {
     delete self._lastHoveredOverlay;
     self._popup.startHideTimer();
   });
-  
+
   this._overlays.push(overlay);
 
   // The viewer always operates in pixel coordinates for efficiency reasons
@@ -172,7 +175,7 @@ annotorious.mediatypes.openlayers.Viewer.prototype.addAnnotation = function(anno
     var shapeB = b.annotation.shapes[0];
     return annotorious.shape.getSize(shapeB) - annotorious.shape.getSize(shapeA);
   });
- 
+
   var zIndex = 10000;
   goog.array.forEach(this._overlays, function(overlay) {
     goog.style.setStyle(overlay.marker.div, 'z-index', zIndex);
@@ -189,7 +192,7 @@ annotorious.mediatypes.openlayers.Viewer.prototype.addAnnotation = function(anno
 annotorious.mediatypes.openlayers.Viewer.prototype.removeAnnotation = function(annotation) {
   var overlay = goog.array.find(this._overlays, function(overlay) {
     return overlay.annotation == annotation;
-  }); 
+  });
 
   if (overlay) {
     goog.array.remove(this._overlays, overlay);

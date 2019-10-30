@@ -14,20 +14,23 @@ annotorious.Popup = function(annotator) {
   this.element = goog.soy.renderAsElement(annotorious.templates.popup);
 
   /** @private **/
-  this._annotator = annotator;  
-    
+  this._annotator = annotator;
+
   /** @private **/
   this._currentAnnotation;
 
   /** @private **/
   this._text = goog.dom.query('.annotorious-popup-text', this.element)[0];
 
+   /** @private **/
+  this._select_text = goog.dom.query('.annotorious-popup-select-text', this.element)[0];
+
   /** @private **/
   this._buttons = goog.dom.query('.annotorious-popup-buttons', this.element)[0];
-  
+
   /** @private **/
   this._popupHideTimer;
-  
+
   /** @private **/
   this._buttonHideTimer;
 
@@ -37,10 +40,12 @@ annotorious.Popup = function(annotator) {
   /** @private **/
   this._extraFields = [];
 
+  this._defaultTags = [];
+
   var btnEdit = goog.dom.query('.annotorious-popup-button-edit', this._buttons)[0];
   var btnDelete = goog.dom.query('.annotorious-popup-button-delete', this._buttons)[0];
 
-  var self = this;  
+  var self = this;
   goog.events.listen(btnEdit, goog.events.EventType.MOUSEOVER, function(event) {
     goog.dom.classes.add(btnEdit, 'annotorious-popup-button-active');
   });
@@ -52,13 +57,13 @@ annotorious.Popup = function(annotator) {
   goog.events.listen(btnEdit, goog.events.EventType.CLICK, function(event) {
     goog.style.setOpacity(self.element, 0);
     goog.style.setStyle(self.element, 'pointer-events', 'none');
-    annotator.editAnnotation(self._currentAnnotation); 
+    annotator.editAnnotation(self._currentAnnotation);
   });
 
   goog.events.listen(btnDelete, goog.events.EventType.MOUSEOVER, function(event) {
     goog.dom.classes.add(btnDelete, 'annotorious-popup-button-active');
   });
-  
+
   goog.events.listen(btnDelete, goog.events.EventType.MOUSEOUT, function() {
     goog.dom.classes.remove(btnDelete, 'annotorious-popup-button-active');
   });
@@ -73,14 +78,14 @@ annotorious.Popup = function(annotator) {
     }
   });
 
-  if (annotorious.events.ui.hasMouse) {  
+  if (annotorious.events.ui.hasMouse) {
     goog.events.listen(this.element, goog.events.EventType.MOUSEOVER, function(event) {
       window.clearTimeout(self._buttonHideTimer);
       if (goog.style.getStyle(self._buttons, 'opacity') < 0.9)
         goog.style.setOpacity(self._buttons, 0.9);
       self.clearHideTimer();
     });
-  
+
     goog.events.listen(this.element, goog.events.EventType.MOUSEOUT, function(event) {
       goog.style.setOpacity(self._buttons, 0);
       self.startHideTimer();
@@ -90,7 +95,7 @@ annotorious.Popup = function(annotator) {
       self.startHideTimer();
     });
   }
-    
+
   goog.style.setOpacity(this._buttons, 0);
   goog.style.setOpacity(this.element, 0);
   goog.style.setStyle(this.element, 'pointer-events', 'none');
@@ -105,7 +110,7 @@ annotorious.Popup = function(annotator) {
  */
 annotorious.Popup.prototype.addField = function(field) {
   var fieldEl = goog.dom.createDom('div', 'annotorious-popup-field');
-  
+
   if (goog.isString(field))  {
     fieldEl.innerHTML = field;
   } else if (goog.isFunction(field)) {
@@ -115,6 +120,10 @@ annotorious.Popup.prototype.addField = function(field) {
   }
 
   goog.dom.appendChild(this.element, fieldEl);
+}
+
+annotorious.Popup.prototype.addTags = function(tags) {
+  this._defaultTags = tags;
 }
 
 /**
@@ -154,7 +163,9 @@ annotorious.Popup.prototype.clearHideTimer = function() {
  */
 annotorious.Popup.prototype.show = function(annotation, xy) {
   this.clearHideTimer();
-
+  console.log('popup_show====================================');
+  console.log(annotation);
+  console.log('====================================');
   if (xy)
     this.setPosition(xy);
 
@@ -163,7 +174,7 @@ annotorious.Popup.prototype.show = function(annotation, xy) {
 
   if (this._buttonHideTimer)
     window.clearTimeout(this._buttonHideTimer);
-      
+
   goog.style.setOpacity(this._buttons, 0.9);
 
   if (annotorious.events.ui.hasMouse) {
@@ -172,7 +183,7 @@ annotorious.Popup.prototype.show = function(annotation, xy) {
       goog.style.setOpacity(self._buttons, 0);
     }, 1000);
   }
-  
+
   goog.style.setOpacity(this.element, 0.9);
   goog.style.setStyle(this.element, 'pointer-events', 'auto');
   this._annotator.fireEvent(annotorious.events.EventType.POPUP_SHOWN, this._currentAnnotation);
@@ -197,11 +208,22 @@ annotorious.Popup.prototype.setAnnotation = function(annotation) {
   else
     this._text.innerHTML = '<span class="annotorious-popup-empty">No comment</span>';
 
+  console.log('setAnnotation====================================');
+  console.log(annotation.tag);
+  console.log(annotation);
+  console.log(annotation["tag"]);
+  console.log('====================================');
+
+  if (annotation.tag || annotation["tag"])
+    this._select_text.innerHTML = annotation.tag || annotation["tag"];
+  else
+    this._select_text.innerHTML = '<span class="annotorious-popup-empty">No Tag</span>';
+
   if (('editable' in annotation) && annotation.editable == false)
     goog.style.showElement(this._buttons, false);
   else
     goog.style.showElement(this._buttons, true);
-  
+
   // Update extra fields (if any)
   goog.array.forEach(this._extraFields, function(field) {
     var f = field.fn(annotation);

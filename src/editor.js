@@ -16,13 +16,13 @@ goog.require('annotorious.templates');
  */
 annotorious.Editor = function(annotator) {
   this.element = goog.soy.renderAsElement(annotorious.templates.editform);
-  
+
   /** @private **/
   this._annotator = annotator;
 
   /** @private **/
   this._item = annotator.getItem();
-  
+
   /** @private **/
   this._original_annotation;
 
@@ -31,6 +31,9 @@ annotorious.Editor = function(annotator) {
 
   /** @private **/
   this._textarea = new goog.ui.Textarea('');
+
+  /** @private **/
+  this._select = goog.dom.query('.annotorious-popup-select', this.element)[0];
 
   /** @private **/
   this._btnCancel = goog.dom.query('.annotorious-editor-button-cancel', this.element)[0];
@@ -60,10 +63,10 @@ annotorious.Editor = function(annotator) {
     if (self._original_annotation)
       annotator.fireEvent(annotorious.events.EventType.ANNOTATION_UPDATED, annotation, annotator.getItem());
     else
-      annotator.fireEvent(annotorious.events.EventType.ANNOTATION_CREATED, annotation, annotator.getItem());      
+      annotator.fireEvent(annotorious.events.EventType.ANNOTATION_CREATED, annotation, annotator.getItem());
     self.close();
   });
- 
+
   goog.style.showElement(this.element, false);
   goog.dom.appendChild(annotator.element, this.element);
   this._textarea.decorate(goog.dom.query('.annotorious-editor-text', this.element)[0]);
@@ -78,7 +81,7 @@ annotorious.Editor = function(annotator) {
  */
 annotorious.Editor.prototype.addField = function(field) {
   var fieldEl = goog.dom.createDom('div', 'annotorious-editor-field');
-  
+
   if (goog.isString(field))  {
     fieldEl.innerHTML = field;
   } else if (goog.isFunction(field)) {
@@ -93,7 +96,7 @@ annotorious.Editor.prototype.addField = function(field) {
 /**
  * Opens the edit form with an annotation.
  * @param {annotorious.Annotation=} opt_annotation the annotation to edit (or undefined)
- * @param {Object=} opt_event the event, if any 
+ * @param {Object=} opt_event the event, if any
  */
 annotorious.Editor.prototype.open = function(opt_annotation, opt_event) {
   this._annotator.fireEvent(annotorious.events.EventType.BEFORE_EDITOR_SHOWN, opt_annotation);
@@ -106,7 +109,26 @@ annotorious.Editor.prototype.open = function(opt_annotation, opt_event) {
 
   goog.style.showElement(this.element, true);
   this._textarea.getElement().focus();
-  
+
+  console.log('opt_event====================================');
+  console.log(this._select);
+  console.log('====================================');
+
+  var that = this;
+  if (opt_event && opt_event.tags) {
+    that._select.length = 0;
+    goog.array.forEach(opt_event.tags, function(element, index) {
+      var option = document.createElement("option");
+      option.text = element;
+      that._select.add(option, that._select[index]);
+    })
+  }
+
+
+  if (opt_annotation.tag || opt_annotation["tag"]) {
+    var index = opt_event.tags.indexOf(opt_annotation.tag || opt_annotation["tag"]);
+    this._select.selectedIndex = index;
+  }
   // Update extra fields (if any)
   goog.array.forEach(this._extraFields, function(field) {
     var f = field.fn(opt_annotation);
@@ -145,13 +167,25 @@ annotorious.Editor.prototype.getAnnotation = function() {
     return url;
   });
 
+  var sanitizedSelect = goog.string.html.htmlSanitize(this._select.options[this._select.selectedIndex].value, function(url) {
+    return url;
+  });
+  console.log('getAnotation====================================');
+  console.log(sanitizedSelect);
+  console.log('====================================');
+
+
+
   if (this._current_annotation) {
     this._current_annotation.text = sanitized;
+    this._current_annotation.tag = sanitizedSelect;
   } else {
-    this._current_annotation = 
-      new annotorious.Annotation(this._item.src, sanitized, this._annotator.getActiveSelector().getShape());  
+    this._current_annotation =
+      new annotorious.Annotation(this._item.src, sanitized, this._annotator.getActiveSelector().getShape(), sanitizedSelect);
   }
-
+  console.log('====================================');
+  console.log(this._current_annotation);
+  console.log('====================================');
   return this._current_annotation;
 }
 

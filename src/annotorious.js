@@ -13,22 +13,24 @@ goog.require('annotorious.mediatypes.openseadragon.OpenSeadragonModule');
  * The main entrypoint to the application. The Annotorious class is instantiated exactly once,
  * and added to the global window object as 'window.anno'. It exposes the external JavaScript API
  * and internally manages the 'modules'. (Each module is responsible for one particular media
- * type - image, OpenLayers, etc.)  
+ * type - image, OpenLayers, etc.)
  * @constructor
  */
 annotorious.Annotorious = function() {
   /** @private **/
   this._isInitialized = false;
-  
+
+  this._tags = [];
+
   /** @private **/
   this._modules = [ new annotorious.mediatypes.image.ImageModule() ];
-  
+
   if (window['OpenLayers'])
     this._modules.push(new annotorious.mediatypes.openlayers.OpenLayersModule());
-    
+
   if (window['OpenSeadragon'])
     this._modules.push(new annotorious.mediatypes.openseadragon.OpenSeadragonModule());
-  
+
   /** @private **/
   this._plugins = [];
 
@@ -39,7 +41,7 @@ annotorious.Annotorious = function() {
 annotorious.Annotorious.prototype._init = function() {
   if (this._isInitialized)
     return;
-  
+
   var self = this;
   goog.array.forEach(this._modules, function(module) {
     module.init();
@@ -48,19 +50,19 @@ annotorious.Annotorious.prototype._init = function() {
   goog.array.forEach(this._plugins, function(plugin) {
     if (plugin.initPlugin)
       plugin.initPlugin(self);
-        
+
     goog.array.forEach(self._modules, function(module) {
       module.addPlugin(plugin);
     });
   });
-  
+
   this._isInitialized = true;
 }
 
 /**
  * Returns the module that is in charge of handling the item with the specified
  * URL or null, if no responsible module is found.
- * @param {string} item_src the URL of the annotatable item 
+ * @param {string} item_src the URL of the annotatable item
  * @return {Object | null}
  * @private
  */
@@ -74,7 +76,7 @@ annotorious.Annotorious.prototype._getModuleForItemSrc = function(item_src) {
  * 'Manually' actives the selector, bypassing the selection widget. Note: this also
  * works when the selection widget is hidden. Primary use case for this is for developers
  * who want to build their own selector widgets or 'Create Annotation' buttons.
- * The selector can be activated on a specific item or globally, on all items (which 
+ * The selector can be activated on a specific item or globally, on all items (which
  * serves mainly as a shortcut for pages where there is only one annotatable item).
  * The function can take a callback function as parameter, which will be called when the
  * selector is deactivated again.
@@ -108,11 +110,19 @@ annotorious.Annotorious.prototype.activateSelector = function(opt_item_url_or_ca
  * @param {annotorious.Annotation} annotation the annotation
  * @param {annotorious.Annotation} opt_replace optionally, an existing annotation to replace
  */
-annotorious.Annotorious.prototype.addAnnotation = function(annotation, opt_replace) {  
-  annotation.src = annotorious.dom.toAbsoluteURL(annotation.src);
-  var module = this._getModuleForItemSrc(annotation.src); 
+annotorious.Annotorious.prototype.addAnnotation = function(annotation, opt_replace) {
+  console.log('ADDANNOT====================================');
+  console.log(annotorious.dom.toAbsoluteURL(annotation.src));
+  console.log(annotation);
+  console.log(opt_replace);
+  console.log(this.getAnnotations())
+
+  // annotation.src = annotorious.dom.toAbsoluteURL(annotation.src);
+  var module = this._getModuleForItemSrc(annotation.src);
+  console.log(module);
   if (module)
     module.addAnnotation(annotation, opt_replace);
+  console.log('====================================');
 }
 
 /**
@@ -150,13 +160,13 @@ annotorious.Annotorious.prototype.addPlugin = function(plugin_name, opt_config_o
       // Document loaded -- init immediately
       if (plugin.initPlugin)
         plugin.initPlugin(this);
-        
+
       goog.array.forEach(this._modules, function(module) {
         module.addPlugin(plugin);
-      });      
+      });
     } else {
       // Document not loaded yet -- defer init
-      this._plugins.push(plugin);  
+      this._plugins.push(plugin);
     }
   } catch (error) {
     console.log('Could not load plugin: ' + plugin_name);
@@ -179,11 +189,11 @@ annotorious.Annotorious.prototype.destroy = function(opt_item_url) {
     goog.array.forEach(this._modules, function(module) {
       module.destroy();
     });
-  }  
+  }
 }
 
 /**
- * Returns the name of the selector that is currently activated on a 
+ * Returns the name of the selector that is currently activated on a
  * particular item.
  * @param {string} item_url the URL of the item to query for the active selector
  */
@@ -230,6 +240,10 @@ annotorious.Annotorious.prototype.getAvailableSelectors = function(item_url) {
     return [];
 }
 
+annotorious.Annotorious.prototype.getTags = function(item_url) {
+  return this._tags;
+}
+
 /**
  * Hides existing annotations on all, or a specific item.
  * @param {string} opt_item_url the URL of the item
@@ -266,6 +280,7 @@ annotorious.Annotorious.prototype.hideSelectionWidget = function(opt_item_url) {
 
 annotorious.Annotorious.prototype.stopSelection = function(opt_item_url) {
   if (opt_item_url) {
+
     var module = this._getModuleForItemSrc(opt_item_url);
     if (module)
       module.stopSelection(opt_item_url);
@@ -298,16 +313,20 @@ annotorious.Annotorious.prototype.highlightAnnotation = function(annotation) {
  * Makes an item annotatable, if there is a module that supports the item type.
  * @param {Object} item the annotatable item
  */
-annotorious.Annotorious.prototype.makeAnnotatable = function(item) {
+annotorious.Annotorious.prototype.makeAnnotatable = function(item, tags) {
   // Be sure to init if the load handler hasn't already taken care of it
   this._init();
-  
+
   var module = goog.array.find(this._modules, function(module) {
     return module.supports(item);
   });
 
+  this._tags = tags;
+
+  if (tags)
+    module.addTags(tags);
   if (module)
-    module.makeAnnotatable(item);
+    module.makeAnnotatable(item, tags);
   else
     throw('Error: Annotorious does not support this media type in the current version or build configuration.');
 }
@@ -323,7 +342,7 @@ annotorious.Annotorious.prototype.removeAll = function(opt_item_url) {
   // to modules and annotators!
   var self = this;
   goog.array.forEach(this.getAnnotations(opt_item_url), function(annotation) {
-    self.removeAnnotation(annotation);    
+    self.removeAnnotation(annotation);
   });
 }
 
@@ -358,25 +377,25 @@ annotorious.Annotorious.prototype.reset = function(annotation) {
 annotorious.Annotorious.prototype.setActiveSelector = function(item_url, selector) {
   var module = this._getModuleForItemSrc(item_url);
   if (module)
-    module.setActiveSelector(item_url, selector);  
+    module.setActiveSelector(item_url, selector);
 }
- 
+
 /**
  * Sets system-wide properties. The 'props' object is a key/value hash and
  * supports the following properties:
  *
- * outline: outline color for annotation and selection shapes 
+ * outline: outline color for annotation and selection shapes
  * stroke: stroke color for annotation and selection shapes
  * fill: fill color for annotation and selection shapes
  * hi_stroke: stroke color for highlighted annotation shapes
  * hi_fill: fill color for highlighted annotation shapes
- * 
+ *
  * @param {Object} props the properties object
  */
 annotorious.Annotorious.prototype.setProperties = function(props) {
   goog.array.forEach(this._modules, function(module) {
     module.setProperties(props);
-  });  
+  });
 }
 
 /**
@@ -407,14 +426,14 @@ annotorious.Annotorious.prototype.showAnnotations = function(opt_item_url) {
     goog.array.forEach(this._modules, function(module) {
       module.showAnnotations();
     });
-  } 
+  }
 }
 
 /**
  * Shows the selection widget, thus enabling users to create new annotations.
  * The selection widget can be made visible on a specific item or globally, on all
  * annotatable items on the page.
- * @param {string | undefined} opt_item_url the URL of the item on which to show the selection widget 
+ * @param {string | undefined} opt_item_url the URL of the item on which to show the selection widget
  */
 annotorious.Annotorious.prototype.showSelectionWidget = function(opt_item_url) {
   if (opt_item_url) {
