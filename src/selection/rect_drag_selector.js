@@ -71,8 +71,10 @@ annotorious.plugins.selection.RectDragSelector.prototype.init = function(annotat
   /** @private **/
   this._mouseUpListener;
 
+   /** @private **/
   this._TAGS;
 
+   /** @private **/
   this._TAGS_COLOR_MAP;
 }
 
@@ -317,6 +319,10 @@ annotorious.plugins.selection.RectDragSelector.prototype.drawShape = function(g2
 
   if (!shape.style) shape.style = {};
 
+  var tagColor = goog.array.find(this._TAGS_COLOR_MAP, function(tag) {
+    return tag.name == tag;
+  }).color;
+
   if (shape.type == annotorious.shape.ShapeType.RECTANGLE) {
     if (highlight) {
       fill = shape.style.hi_fill || this._HI_FILL;
@@ -326,7 +332,7 @@ annotorious.plugins.selection.RectDragSelector.prototype.drawShape = function(g2
       stroke_width = shape.style.hi_stroke_width || this._HI_STROKE_WIDTH;
     } else {
       fill = shape.style.fill || this._FILL;
-      stroke = shape.style.stroke || _TAGS_COLOR_MAP.find(x => x.name === tag).color || this._STROKE;
+      stroke = shape.style.stroke || tagColor || this._STROKE;
       outline = shape.style.outline || this._OUTLINE;
       outline_width = shape.style.outline_width || this._OUTLINE_WIDTH;
       stroke_width = shape.style.stroke_width || this._STROKE_WIDTH;
