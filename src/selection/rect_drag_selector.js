@@ -346,7 +346,9 @@ annotorious.plugins.selection.RectDragSelector.prototype.drawShape = function(g2
     }
 
     geom = shape.geometry;
-
+    console.log('====================================');
+    console.log(tagColor);
+    console.log('====================================');
     // Outline
     if (outline) {
         g2d.lineJoin = "round";
