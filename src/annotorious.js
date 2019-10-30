@@ -313,7 +313,7 @@ annotorious.Annotorious.prototype.highlightAnnotation = function(annotation) {
  * Makes an item annotatable, if there is a module that supports the item type.
  * @param {Object} item the annotatable item
  */
-annotorious.Annotorious.prototype.makeAnnotatable = function(item, tags) {
+annotorious.Annotorious.prototype.makeAnnotatable = function(item, tags, tagsColorMap) {
   // Be sure to init if the load handler hasn't already taken care of it
   this._init();
 
@@ -326,7 +326,7 @@ annotorious.Annotorious.prototype.makeAnnotatable = function(item, tags) {
   if (tags)
     module.addTags(tags);
   if (module)
-    module.makeAnnotatable(item, tags);
+    module.makeAnnotatable(item, tags, tagsColorMap);
   else
     throw('Error: Annotorious does not support this media type in the current version or build configuration.');
 }

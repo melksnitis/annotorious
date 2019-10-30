@@ -242,13 +242,13 @@ annotorious.mediatypes.image.Viewer.prototype._onMouseMove = function(event) {
  * @param {boolean=} highlight set true to highlight the shape
  * @private
  */
-annotorious.mediatypes.image.Viewer.prototype._draw = function(shape, highlight) {
+annotorious.mediatypes.image.Viewer.prototype._draw = function(shape, highlight, tag) {
   var selector = goog.array.find(this._annotator.getAvailableSelectors(), function(selector) {
     return selector.getSupportedShapeType() == shape.type;
   });
 
   if (selector)
-    selector.drawShape(this._g2d, shape, highlight);
+    selector.drawShape(this._g2d, shape, highlight, tag);
   else
     console.log('WARNING unsupported shape type: ' + shape.type);
 }
@@ -262,7 +262,7 @@ annotorious.mediatypes.image.Viewer.prototype.redraw = function() {
   var self = this;
   goog.array.forEach(this._annotations, function(annotation) {
 	if (annotation != self._currentAnnotation)
-      self._draw(self._shapes[annotorious.shape.hashCode(annotation.shapes[0])]);
+      self._draw(self._shapes[annotorious.shape.hashCode(annotation.shapes[0])], false, self._currentAnnotation.tag);
   });
 
   if (this._currentAnnotation) {

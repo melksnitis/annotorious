@@ -72,6 +72,8 @@ annotorious.plugins.selection.RectDragSelector.prototype.init = function(annotat
   this._mouseUpListener;
 
   this._TAGS;
+
+  this._TAGS_COLOR_MAP;
 }
 
 /**
@@ -171,12 +173,15 @@ annotorious.plugins.selection.RectDragSelector.prototype.getSupportedShapeType =
 annotorious.plugins.selection.RectDragSelector.prototype.setProperties = function(props) {
   console.log('==================================== PROPS');
   console.log(props.hasOwnProperty('tags') );
-  console.log(props['tags'] );
+  console.log(props['tagsColorMap'] );
   console.log('====================================');
   if (props.hasOwnProperty('tags'))
     this._TAGS = props['tags'];
     console.log(this._TAGS );
     console.log('his._TAGS====================================');
+
+  if (props.hasOwnProperty('tagsColorMap'))
+    this._TAGS_COLOR_MAP = props['tagsColorMap'];
 
   if (props.hasOwnProperty('outline'))
     this._OUTLINE = props['outline'];
@@ -307,7 +312,7 @@ annotorious.plugins.selection.RectDragSelector.prototype.getTags = function() {
  * @param {annotorious.shape.Shape} shape the shape to draw
  * @param {boolean=} highlight if true, shape will be drawn highlighted
  */
-annotorious.plugins.selection.RectDragSelector.prototype.drawShape = function(g2d, shape, highlight) {
+annotorious.plugins.selection.RectDragSelector.prototype.drawShape = function(g2d, shape, highlight, tag) {
   var geom, stroke, fill, outline, outline_width, stroke_width;
 
   if (!shape.style) shape.style = {};
@@ -321,7 +326,7 @@ annotorious.plugins.selection.RectDragSelector.prototype.drawShape = function(g2
       stroke_width = shape.style.hi_stroke_width || this._HI_STROKE_WIDTH;
     } else {
       fill = shape.style.fill || this._FILL;
-      stroke = shape.style.stroke || this._STROKE;
+      stroke = shape.style.stroke || _TAGS_COLOR_MAP.find(x => x.name === tag).color || this._STROKE;
       outline = shape.style.outline || this._OUTLINE;
       outline_width = shape.style.outline_width || this._OUTLINE_WIDTH;
       stroke_width = shape.style.stroke_width || this._STROKE_WIDTH;

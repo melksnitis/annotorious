@@ -76,7 +76,7 @@ annotorious.mediatypes.Module.prototype._getSettings = function(item_url) {
 /**
  * @private
  */
-annotorious.mediatypes.Module.prototype._initAnnotator = function(item, tags) {
+annotorious.mediatypes.Module.prototype._initAnnotator = function(item, tags, tagsColorMap) {
   var self = this,
       item_src = this.getItemURL(item);
 
@@ -133,6 +133,9 @@ annotorious.mediatypes.Module.prototype._initAnnotator = function(item, tags) {
     if (tags)
       settings.tags = tags;
 
+    if(tagsColorMap)
+      settings.tagsColorMap = tagsColorMap;
+
     if (settings.hide_annotations)
       annotator.hideAnnotations();
 
@@ -147,6 +150,9 @@ annotorious.mediatypes.Module.prototype._initAnnotator = function(item, tags) {
 
   if (tags)
     this._cachedProperties["tags"] = tags;
+
+  if(tagsColorMap)
+    this._cachedProperties["tagsColorMap"] = tagsColorMap;
 
   if (this._cachedProperties)
     annotator.setProperties(this._cachedProperties);
@@ -506,9 +512,9 @@ annotorious.mediatypes.Module.prototype.init = function() {
  * Makes an item annotatable, if it is supported by this module.
  * @param {Object} item the annotatable item
  */
-annotorious.mediatypes.Module.prototype.makeAnnotatable = function(item, tags) {
+annotorious.mediatypes.Module.prototype.makeAnnotatable = function(item, tags, tagsColorMap) {
   if (this.supports(item))
-    this._initAnnotator(item, tags);
+    this._initAnnotator(item, tags, tagsColorMap);
 }
 
 /**

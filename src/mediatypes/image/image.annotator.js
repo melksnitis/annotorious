@@ -213,7 +213,7 @@ annotorious.mediatypes.image.ImageAnnotator.prototype.editAnnotation = function(
 
     var self = this;
     var viewportShape = (shape.units == 'pixel') ? shape : annotorious.shape.transform(shape, function(xy) { return self.fromItemCoordinates(xy); }) ;
-    selector.drawShape(g2d, viewportShape);
+    selector.drawShape(g2d, viewportShape, annotation.tag);
 
     var tags = selector.getTags();
   }
