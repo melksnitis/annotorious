@@ -322,12 +322,13 @@ annotorious.plugins.selection.RectDragSelector.prototype.drawShape = function(g2
 
   if (!shape.style) shape.style = {};
 
-  var tagColor = goog.array.find(this._TAGS_COLOR_MAP, function(tag) {
-    return tag.name == "error";
-  });
-
+  var tagColor = null;
+  // goog.array.find(this._TAGS_COLOR_MAP, function(tag) {
+  //   return tag.name == "error";
+  // });
   console.log('DRAWCOLOR====================================');
   console.log(tagColor);
+  console.log(this._TAGS_COLOR_MAP);
   console.log('====================================');
 
   if (shape.type == annotorious.shape.ShapeType.RECTANGLE) {
