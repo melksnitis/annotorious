@@ -314,14 +314,21 @@ annotorious.plugins.selection.RectDragSelector.prototype.getTags = function() {
  * @param {annotorious.shape.Shape} shape the shape to draw
  * @param {boolean=} highlight if true, shape will be drawn highlighted
  */
-annotorious.plugins.selection.RectDragSelector.prototype.drawShape = function(g2d, shape, highlight, tag) {
+annotorious.plugins.selection.RectDragSelector.prototype.drawShape = function(g2d, shape, highlight, tagName) {
+  console.log('DRAW====================================');
+  console.log(tagName);
+  console.log('====================================');
   var geom, stroke, fill, outline, outline_width, stroke_width;
 
   if (!shape.style) shape.style = {};
 
   var tagColor = goog.array.find(this._TAGS_COLOR_MAP, function(tag) {
-    return tag.name == tag;
+    return tag.name == tagName;
   }).color;
+
+  console.log('DRAW====================================');
+  console.log(tagColor);
+  console.log('====================================');
 
   if (shape.type == annotorious.shape.ShapeType.RECTANGLE) {
     if (highlight) {
