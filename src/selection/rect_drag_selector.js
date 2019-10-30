@@ -324,9 +324,9 @@ annotorious.plugins.selection.RectDragSelector.prototype.drawShape = function(g2
 
   var tagColor = goog.array.find(this._TAGS_COLOR_MAP, function(tag) {
     return tag.name == tagName;
-  }).color;
+  });
 
-  console.log('DRAW====================================');
+  console.log('DRAWCOLOR====================================');
   console.log(tagColor);
   console.log('====================================');
 
