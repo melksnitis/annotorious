@@ -264,7 +264,11 @@ annotorious.mediatypes.image.Viewer.prototype.redraw = function() {
 
   var self = this;
   goog.array.forEach(this._annotations, function(annotation) {
-	if (annotation != self._currentAnnotation)
+  if (annotation != self._currentAnnotation)
+  console.log('EDIT SHAPE====================================');
+  console.log(annotation.tag);
+  console.log(annotation);
+  console.log('====================================');
       self._draw(self._shapes[annotorious.shape.hashCode(annotation.shapes[0])], false, annotation.tag);
   });
 
@@ -272,9 +276,6 @@ annotorious.mediatypes.image.Viewer.prototype.redraw = function() {
     var shape = this._shapes[annotorious.shape.hashCode(this._currentAnnotation.shapes[0])];
     this._draw(shape, true);
     var bbox = annotorious.shape.getBoundingRect(shape).geometry;
-    console.log('EDIT SHAPE====================================');
-    console.log(this._currentAnnotation);
-    console.log('====================================');
     this._annotator.popup.show(this._currentAnnotation, new annotorious.shape.geom.Point(bbox.x, bbox.y + bbox.height + 5));
 
     // TODO Orientation check - what if the popup would be outside the viewport?
