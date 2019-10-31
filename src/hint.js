@@ -5,7 +5,7 @@ goog.require('goog.events');
 goog.require('goog.soy');
 goog.require('goog.style');
 
-/** 
+/**
  * The 'hint' GUI element.
  * @param {Object} annotator the annotator
  * @param {Element} parent the parent DOM element
@@ -15,10 +15,10 @@ goog.require('goog.style');
 annotorious.Hint = function(annotator, parent, opt_msg) {
   var self = this;
 
-  if (!opt_msg)
-    opt_msg = 'Click and Drag to Annotate';
+  // if (!opt_msg)
+  //   opt_msg = 'Click and Drag to Annotate';
 
-  this.element = goog.soy.renderAsElement(annotorious.templates.image.hint, { msg: opt_msg });
+  // this.element = goog.soy.renderAsElement(annotorious.templates.image.hint, { msg: opt_msg });
 
   /** @private **/
   this._annotator = annotator;
