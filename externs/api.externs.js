@@ -14,9 +14,6 @@ var Annotation = {
   /** @type {string} annotation text **/
   text  : {},
 
-  /** @type {string} annotation text **/
-  id  : {},
-
   /** @type {tag} annotation tag **/
   tag  : {},
 
