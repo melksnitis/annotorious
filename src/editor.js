@@ -110,10 +110,6 @@ annotorious.Editor.prototype.open = function(opt_annotation, opt_event) {
   goog.style.showElement(this.element, true);
   this._textarea.getElement().focus();
 
-  console.log('opt_event====================================');
-  console.log(this._select);
-  console.log('====================================');
-
   var that = this;
   if (opt_event && opt_event.tags) {
     that._select.length = 0;
@@ -170,11 +166,6 @@ annotorious.Editor.prototype.getAnnotation = function() {
   var sanitizedSelect = goog.string.html.htmlSanitize(this._select.options[this._select.selectedIndex].value, function(url) {
     return url;
   });
-  console.log('getAnotation====================================');
-  console.log(sanitizedSelect);
-  console.log('====================================');
-
-
 
   if (this._current_annotation) {
     this._current_annotation.text = sanitized;
@@ -183,9 +174,7 @@ annotorious.Editor.prototype.getAnnotation = function() {
     this._current_annotation =
       new annotorious.Annotation(this._item.src, sanitized, this._annotator.getActiveSelector().getShape(), sanitizedSelect);
   }
-  console.log('====================================');
-  console.log(this._current_annotation);
-  console.log('====================================');
+
   return this._current_annotation;
 }
 

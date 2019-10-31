@@ -163,9 +163,7 @@ annotorious.Popup.prototype.clearHideTimer = function() {
  */
 annotorious.Popup.prototype.show = function(annotation, xy) {
   this.clearHideTimer();
-  console.log('popup_show====================================');
-  console.log(annotation);
-  console.log('====================================');
+
   if (xy)
     this.setPosition(xy);
 
@@ -207,12 +205,6 @@ annotorious.Popup.prototype.setAnnotation = function(annotation) {
     this._text.innerHTML = annotation.text.replace(/\n/g, '<br/>');
   else
     this._text.innerHTML = '<span class="annotorious-popup-empty">No comment</span>';
-
-  console.log('setAnnotation====================================');
-  console.log(annotation.tag);
-  console.log(annotation);
-  console.log(annotation["tag"]);
-  console.log('====================================');
 
   if (annotation.tag || annotation["tag"])
     this._select_text.innerHTML = annotation.tag || annotation["tag"];

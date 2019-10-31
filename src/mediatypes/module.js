@@ -153,12 +153,7 @@ annotorious.mediatypes.Module.prototype._initAnnotator = function(item, tags, ta
 
   if(tagsColorMap)
     this._cachedProperties["tagsColorMap"] = tagsColorMap;
-console.log('_cachedProperties====================================');
-console.log(this._cachedProperties);
 
-console.log(tagsColorMap);
-
-console.log('====================================');
   if (this._cachedProperties)
     annotator.setProperties(this._cachedProperties);
 
@@ -364,13 +359,7 @@ annotorious.mediatypes.Module.prototype.addPlugin = function(plugin) {
  * @return {boolean} true if this module is in charge of the media
  */
 annotorious.mediatypes.Module.prototype.annotatesItem = function(item_url) {
-  console.log('ANNOS====================================');
-  console.log(this._annotators);
-  console.log('====================================');
 
-  console.log('====================================');
-  console.log(this._itemsToLoad);
-  console.log('====================================');
   if (this._annotators.containsKey(item_url)) {
     return true;
   } else {

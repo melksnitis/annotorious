@@ -99,9 +99,7 @@ annotorious.mediatypes.openlayers.Viewer.prototype._place_popup = function() {
  * @param {annotorious.Annotation} annotation the annotation
  */
 annotorious.mediatypes.openlayers.Viewer.prototype._show_popup = function(annotation) {
-  console.log(' openlayers====================================');
-  console.log(annotation);
-  console.log('====================================');
+
   this._popup.setAnnotation(annotation);
   this._place_popup();
   this._popup.show();
