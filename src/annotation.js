@@ -14,6 +14,7 @@ goog.require('annotorious.shape');
 annotorious.Annotation = function(src, text, shape, tag, id) {
   console.log(tag);
   this.tag = tag || '';
+  this.id = id || '';
   this.src = src;
   this.text = text;
   this.shapes = [ shape ];
