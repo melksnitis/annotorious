@@ -116,9 +116,6 @@ annotorious.plugins.selection.RectDragSelector.prototype._attachListeners = func
 
     self._enabled = false;
 
-    console.log('EVENT TAGS====================================');
-    console.log(self._TAGS);
-    console.log('====================================');
     if (shape) {
       self._detachListeners();
       self._annotator.fireEvent(annotorious.events.EventType.SELECTION_COMPLETED,
@@ -173,14 +170,8 @@ annotorious.plugins.selection.RectDragSelector.prototype.getSupportedShapeType =
  * Sets the properties on this selector.
  */
 annotorious.plugins.selection.RectDragSelector.prototype.setProperties = function(props) {
-  console.log('==================================== PROPS');
-  console.log(props.hasOwnProperty('tags') );
-  console.log(props['tagsColorMap'] );
-  console.log('====================================');
   if (props.hasOwnProperty('tags'))
     this._TAGS = props['tags'];
-    console.log(this._TAGS );
-    console.log('his._TAGS====================================');
 
   if (props.hasOwnProperty('tagsColorMap'))
     this._TAGS_COLOR_MAP = props['tagsColorMap'];
@@ -315,9 +306,6 @@ annotorious.plugins.selection.RectDragSelector.prototype.getTags = function() {
  * @param {boolean=} highlight if true, shape will be drawn highlighted
  */
 annotorious.plugins.selection.RectDragSelector.prototype.drawShape = function(g2d, shape, highlight, tagName) {
-  console.log('DRAW====================================');
-  console.log(tagName);
-  console.log('====================================');
   var geom, stroke, fill, outline, outline_width, stroke_width;
 
   if (!shape.style) shape.style = {};
@@ -327,11 +315,6 @@ annotorious.plugins.selection.RectDragSelector.prototype.drawShape = function(g2
     tagColor = goog.array.find(this._TAGS_COLOR_MAP, function(tag) {
         return tag.name == tagName;
     }).color;
-
-  console.log('DRAWCOLOR====================================');
-  console.log(tagColor);
-  console.log(this._TAGS_COLOR_MAP);
-  console.log('====================================');
 
   if (shape.type == annotorious.shape.ShapeType.RECTANGLE) {
     if (highlight) {
@@ -349,9 +332,7 @@ annotorious.plugins.selection.RectDragSelector.prototype.drawShape = function(g2
     }
 
     geom = shape.geometry;
-    console.log('====================================');
-    console.log(tagColor);
-    console.log('====================================');
+
     // Outline
     if (outline) {
         g2d.lineJoin = "round";
