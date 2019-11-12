@@ -274,7 +274,8 @@ annotorious.mediatypes.image.Viewer.prototype.redraw = function() {
       return selector.getSupportedShapeType() == shape.type;
     });
 
-    if (selector && selector.getDefaultTag) {
+    console.log(selector.getDefaultTag());
+    if (selector && selector.getDefaultTag()) {
       console.log('redraw====================================');
       console.log(selector.getDefaultTag);
 
