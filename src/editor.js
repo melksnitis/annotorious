@@ -99,6 +99,10 @@ annotorious.Editor.prototype.addField = function(field) {
  * @param {Object=} opt_event the event, if any
  */
 annotorious.Editor.prototype.open = function(opt_annotation, opt_event) {
+  console.log('open====================================');
+  console.log(this._annotator.getActiveSelector().getDefaultTag());
+  console.log('====================================');
+  return
   this._annotator.fireEvent(annotorious.events.EventType.BEFORE_EDITOR_SHOWN, opt_annotation);
 
   this._original_annotation = opt_annotation;

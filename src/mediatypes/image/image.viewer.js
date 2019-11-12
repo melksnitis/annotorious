@@ -274,24 +274,23 @@ annotorious.mediatypes.image.Viewer.prototype.redraw = function() {
       return selector.getSupportedShapeType() == shape.type;
     });
 
-    console.log(selector.getDefaultTag());
-    if (selector && selector.getDefaultTag()) {
-      console.log('redraw====================================');
-      console.log(selector.getDefaultTag);
+    // if (selector && selector.getDefaultTag()) {
+    //   console.log('redraw====================================');
+    //   console.log(selector.getDefaultTag);
 
-      console.log('====================================');
-      this._annotator.tag = selector.getDefaultTag;
-      console.log(this._annotator);
-      this._annotator.addAnnotation(this._currentAnnotation);
-      this._annotator.stopSelection();
-      this._annotator.fireEvent(annotorious.events.EventType.ANNOTATION_CREATED, annotation, annotator.getItem());
-      self._draw(shape, false, this._annotator.tag);
-    } else {
+    //   console.log('====================================');
+    //   this._annotator.tag = selector.getDefaultTag;
+    //   console.log(this._annotator);
+    //   this._annotator.addAnnotation(this._currentAnnotation);
+    //   this._annotator.stopSelection();
+    //   this._annotator.fireEvent(annotorious.events.EventType.ANNOTATION_CREATED, annotation, annotator.getItem());
+    //   self._draw(shape, false, this._annotator.tag);
+    // } else {
       this._draw(shape, true);
       var bbox = annotorious.shape.getBoundingRect(shape).geometry;
       this._annotator.popup.show(this._currentAnnotation, new annotorious.shape.geom.Point(bbox.x, bbox.y + bbox.height + 5));
 
       // TODO Orientation check - what if the popup would be outside the viewport?
-    }
+    // }
   }
 }
