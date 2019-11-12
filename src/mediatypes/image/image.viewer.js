@@ -264,15 +264,18 @@ annotorious.mediatypes.image.Viewer.prototype.redraw = function() {
   if (annotation != self._currentAnnotation)
 
       var tagName = annotation["tag"] || annotation.tag;
+      console.log("LOLXD");
+      console.log(annotation.shapes[0])
+      console.log(annotorious.shape.hashCode(annotation.shapes[0]))
 
       self._draw(self._shapes[annotorious.shape.hashCode(annotation.shapes[0])], false, tagName);
   });
 
   if (this._currentAnnotation) {
     var shape = this._shapes[annotorious.shape.hashCode(this._currentAnnotation.shapes[0])];
-    var selector = goog.array.find(this._annotator.getAvailableSelectors(), function(selector) {
-      return selector.getSupportedShapeType() == shape.type;
-    });
+    // var selector = goog.array.find(this._annotator.getAvailableSelectors(), function(selector) {
+    //   return selector.getSupportedShapeType() == shape.type;
+    // });
 
     // if (selector && selector.getDefaultTag()) {
     //   console.log('redraw====================================');
