@@ -102,7 +102,9 @@ annotorious.Editor.prototype.open = function(opt_annotation, opt_event) {
   if ( this._annotator.getActiveSelector().getDefaultTag()) {
     var defaultTag = this._annotator.getActiveSelector().getDefaultTag();
     var annotation = self.getAnnotation();
-    annotation.tag = defaultTag;
+    console.log(annotation)
+
+    opt_annotation["tag"] = defaultTag;
     this._annotator.addAnnotation(annotation);
     this._annotator.stopSelection();
     this._annotator.fireEvent(annotorious.events.EventType.ANNOTATION_CREATED, annotation, annotator.getItem());
