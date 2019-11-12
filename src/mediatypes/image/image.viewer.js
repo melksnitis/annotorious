@@ -243,6 +243,10 @@ annotorious.mediatypes.image.Viewer.prototype._onMouseMove = function(event) {
  * @private
  */
 annotorious.mediatypes.image.Viewer.prototype._draw = function(shape, highlight, tag) {
+  console.log('====================================');
+  console.log(shape);
+  console.log('====================================');
+
   var selector = goog.array.find(this._annotator.getAvailableSelectors(), function(selector) {
     return selector.getSupportedShapeType() == shape.type;
   });
@@ -267,6 +271,8 @@ annotorious.mediatypes.image.Viewer.prototype.redraw = function() {
       console.log("LOLXD");
       console.log(annotation.shapes[0])
       console.log(annotorious.shape.hashCode(annotation.shapes[0]))
+      console.log(self._shapes);
+      console.log("MHMM");
 
       self._draw(self._shapes[annotorious.shape.hashCode(annotation.shapes[0])], false, tagName);
   });
