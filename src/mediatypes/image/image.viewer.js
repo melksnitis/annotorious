@@ -268,13 +268,6 @@ annotorious.mediatypes.image.Viewer.prototype.redraw = function() {
   if (annotation != self._currentAnnotation)
 
       var tagName = annotation["tag"] || annotation.tag;
-      console.log("LOLXD");
-      console.log(annotation.shapes[0])
-      console.log(annotorious.shape.hashCode(annotation.shapes[0]))
-      console.log(self._shapes);
-      console.log(self._shapes[annotorious.shape.hashCode(annotation.shapes[0])]);
-      console.log("MHMM");
-
       self._draw(self._shapes[annotorious.shape.hashCode(annotation.shapes[0])], false, tagName);
   });
 
@@ -296,9 +289,6 @@ annotorious.mediatypes.image.Viewer.prototype.redraw = function() {
     //   this._annotator.fireEvent(annotorious.events.EventType.ANNOTATION_CREATED, annotation, annotator.getItem());
     //   self._draw(shape, false, this._annotator.tag);
     // } else {
-      console.log('currrent====================================');
-      console.log(shape);
-      console.log('====================================');
       this._draw(shape, true);
       var bbox = annotorious.shape.getBoundingRect(shape).geometry;
       this._annotator.popup.show(this._currentAnnotation, new annotorious.shape.geom.Point(bbox.x, bbox.y + bbox.height + 5));
