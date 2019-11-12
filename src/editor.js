@@ -101,7 +101,7 @@ annotorious.Editor.prototype.addField = function(field) {
 annotorious.Editor.prototype.open = function(opt_annotation, opt_event) {
   if ( this._annotator.getActiveSelector().getDefaultTag()) {
     var defaultTag = this._annotator.getActiveSelector().getDefaultTag();
-    var annotation = this.getAnnotation();
+    var annotation = this.getAnnotation(defaultTag);
     console.log(annotation)
 
     opt_annotation.tag = defaultTag;
@@ -169,14 +169,19 @@ annotorious.Editor.prototype.setPosition = function(xy) {
  * Returns the annotation that is the current state of the editor.
  * @return {annotorious.Annotation} the annotation
  */
-annotorious.Editor.prototype.getAnnotation = function() {
+annotorious.Editor.prototype.getAnnotation = function(defaultTag) {
   var sanitized = goog.string.html.htmlSanitize(this._textarea.getValue(), function(url) {
     return url;
   });
 
-  var sanitizedSelect = goog.string.html.htmlSanitize(this._select.options[this._select.selectedIndex].value, function(url) {
-    return url;
-  });
+  if (defaultTag) {
+    var sanitizedSelect = defaultTag;
+  }
+  else {
+    var sanitizedSelect = goog.string.html.htmlSanitize(this._select.options[this._select.selectedIndex].value, function(url) {
+      return url;
+    });
+  }
 
   if (this._current_annotation) {
     this._current_annotation.text = sanitized;
