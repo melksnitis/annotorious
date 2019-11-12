@@ -76,6 +76,9 @@ annotorious.plugins.selection.RectDragSelector.prototype.init = function(annotat
 
    /** @private **/
   this._TAGS_COLOR_MAP;
+
+  /** @private **/
+  this._DEFAULT_TAG;
 }
 
 /**
@@ -172,6 +175,9 @@ annotorious.plugins.selection.RectDragSelector.prototype.getSupportedShapeType =
 annotorious.plugins.selection.RectDragSelector.prototype.setProperties = function(props) {
   if (props.hasOwnProperty('tags'))
     this._TAGS = props['tags'];
+
+  if (props.hasOwnProperty('defaultTag'))
+    this._DEFAULT_TAG = props['defaultTag'];
 
   if (props.hasOwnProperty('tagsColorMap'))
     this._TAGS_COLOR_MAP = props['tagsColorMap'];
@@ -297,6 +303,10 @@ annotorious.plugins.selection.RectDragSelector.prototype.getViewportBounds = fun
 
 annotorious.plugins.selection.RectDragSelector.prototype.getTags = function() {
   return this._TAGS
+};
+
+annotorious.plugins.selection.RectDragSelector.prototype.getDefaultTag = function() {
+  return this._DEFAULT_TAG
 };
 
 /**
