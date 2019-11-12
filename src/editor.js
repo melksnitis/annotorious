@@ -107,7 +107,7 @@ annotorious.Editor.prototype.open = function(opt_annotation, opt_event) {
     opt_annotation.tag = defaultTag;
     this._annotator.addAnnotation(annotation);
     this._annotator.stopSelection();
-    this._annotator.fireEvent(annotorious.events.EventType.ANNOTATION_CREATED, annotation, annotator.getItem());
+    this._annotator.fireEvent(annotorious.events.EventType.ANNOTATION_CREATED, annotation, this._annotator.getItem());
     return
   }
   this._annotator.fireEvent(annotorious.events.EventType.BEFORE_EDITOR_SHOWN, opt_annotation);
