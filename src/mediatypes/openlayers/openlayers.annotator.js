@@ -57,6 +57,10 @@ annotorious.mediatypes.openlayers.OpenLayersAnnotator = function(map) {
             height = parseInt(goog.style.getComputedStyle(self.element, 'height'), 10);
 
         goog.style.setSize(self._editCanvas, width, height);
+        console.log("SIZE ON RESIZE");
+        console.log(width);
+        console.log(height);
+        console.log("SIZE ON RESIZE");
         self._editCanvas.width = width;
         self._editCanvas.height = height;
       };
