@@ -243,10 +243,6 @@ annotorious.mediatypes.image.Viewer.prototype._onMouseMove = function(event) {
  * @private
  */
 annotorious.mediatypes.image.Viewer.prototype._draw = function(shape, highlight, tag) {
-  console.log('====================================');
-  console.log(shape);
-  console.log('====================================');
-
   var selector = goog.array.find(this._annotator.getAvailableSelectors(), function(selector) {
     return selector.getSupportedShapeType() == shape.type;
   });

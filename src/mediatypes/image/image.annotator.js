@@ -72,6 +72,10 @@ annotorious.mediatypes.image.ImageAnnotator = function(item, opt_popup) {
   goog.dom.appendChild(this.element, item);
 
   var img_bounds = goog.style.getBounds(item);
+  console.log('====================================');
+  console.log(img_bounds.height);
+  console.log(img_bounds.width);
+  console.log('====================================');
   this._viewCanvas = goog.soy.renderAsElement(annotorious.templates.image.canvas,
     { width:img_bounds.width, height:img_bounds.height });
   if (annotorious.events.ui.hasMouse)
