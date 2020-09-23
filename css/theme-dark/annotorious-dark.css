@@ -185,6 +185,7 @@
   background:url(DarkSprite.png) no-repeat;
   background-position:0 -70px;
   outline:none;
+  display: none !important;
 }
 
 .annotorious-popup-button-edit:hover {

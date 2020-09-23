@@ -145,7 +145,7 @@
   height:16px;
   text-indent:100px;
   overflow:hidden;
-  display: none;
+  display: none !important;
 }
 
 .annotorious-popup-button-delete {
