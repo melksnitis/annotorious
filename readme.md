@@ -22,6 +22,10 @@ Want to help out? There are many ways you can contribute!
 * Missing a feature? [Learn how to develop your own Annotorious Plugins](https://github.com/annotorious/annotorious/wiki/Developing-Plugins).
 * Want to hack on Annotorious? We welcome contributions no matter how small or big!
 
+### To build new version
+
+'java -jar plovr/plovr.jar build standalone.json > out.min.js'
+
 ## License
 
 Annotorious is licensed under the terms of the [MIT License](mit-license.txt). In short: Annotorious is delivered 'as is', and you can feel free to use it wherever or however you want. Needless to say: if you fix a bug, or add a cool feature, be sure to give back to the community.
